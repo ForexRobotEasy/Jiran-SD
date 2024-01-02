@@ -1,0 +1,141 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                                        Jiran SD |
+//|                                 Developed by Forex Robot Easy Team |
+//|                                                      forexroboteasy.com |
+//+------------------------------------------------------------------+
+#property copyright 'Forex Robot Easy Team'
+#property link      'forexroboteasy.com'
+
+// Global variables
+int Timeframe = PERIOD_M5; // Timeframe to be optimized for
+string[] CurrencyPairs = {'EURUSD', 'GBPUSD', 'USDJPY'}; // Currency pairs to be optimized for
+double MinimumSpread = 1.0; // Minimum spread required for optimal trading
+double Leverage = 100.0; // Account leverage
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    // Check if the current currency pair is supported
+    if (!IsSupportedCurrencyPair(Symbol()))
+    {
+        Print('Unsupported currency pair: ', Symbol());
+        return INIT_FAILED;
+    }
+
+    // Check if the current spread is within the required range
+    if (Ask - Bid > MinimumSpread * Point)
+    {
+        Print('Spread is too high for optimal trading: ', Ask - Bid);
+        return INIT_FAILED;
+    }
+
+    // Set the account leverage
+    SetLeverage(Leverage);
+
+    // Initialize neural networks
+    InitializeNeuralNetworks();
+
+    return INIT_SUCCEEDED;
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+    // Deinitialize neural networks
+    DeinitializeNeuralNetworks();
+}
+
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    // Check if the current currency pair is supported
+    if (!IsSupportedCurrencyPair(Symbol()))
+    {
+        Print('Unsupported currency pair: ', Symbol());
+        return;
+    }
+
+    // Check if the current spread is within the required range
+    if (Ask - Bid > MinimumSpread * Point)
+    {
+        Print('Spread is too high for optimal trading: ', Ask - Bid);
+        return;
+    }
+
+    // Analyze data using neural networks
+    double prediction = AnalyzeData();
+
+    // Place a trade based on the analyzed data
+    if (prediction > 0.5)
+    {
+        OpenBuyPosition();
+    }
+    else if (prediction < 0.5)
+    {
+        OpenSellPosition();
+    }
+}
+
+//+------------------------------------------------------------------+
+//| Check if the current currency pair is supported                  |
+//+------------------------------------------------------------------+
+bool IsSupportedCurrencyPair(const string symbol)
+{
+    for (int i = 0; i < ArraySize(CurrencyPairs); i++)
+    {
+        if (symbol == CurrencyPairs[i])
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//+------------------------------------------------------------------+
+//| Initialize neural networks                                       |
+//+------------------------------------------------------------------+
+void InitializeNeuralNetworks()
+{
+    // Code to initialize neural networks
+}
+
+//+------------------------------------------------------------------+
+//| Deinitialize neural networks                                     |
+//+------------------------------------------------------------------+
+void DeinitializeNeuralNetworks()
+{
+    // Code to deinitialize neural networks
+}
+
+//+------------------------------------------------------------------+
+//| Analyze data using neural networks                               |
+//+------------------------------------------------------------------+
+double AnalyzeData()
+{
+    // Code to analyze data using neural networks
+    return 0.5; // Placeholder value for demonstration purposes
+}
+
+//+------------------------------------------------------------------+
+//| Open a buy position                                              |
+//+------------------------------------------------------------------+
+void OpenBuyPosition()
+{
+    // Code to open a buy position
+}
+
+//+------------------------------------------------------------------+
+//| Open a sell position                                             |
+//+------------------------------------------------------------------+
+void OpenSellPosition()
+{
+    // Code to open a sell position
+}
